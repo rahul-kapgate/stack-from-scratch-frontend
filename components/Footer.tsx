@@ -15,7 +15,7 @@ export function Footer() {
               GitHub
             </a>
             <a
-              href="mailto:rahulkapgate03@gmail.com"
+              href="/contact"
               className="hover:underline"
             >
               Contact
