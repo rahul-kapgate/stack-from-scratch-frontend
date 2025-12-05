@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 export const metadata: Metadata = {
   title: "Stack From Scratch",
@@ -15,15 +15,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen flex flex-col">
-        <Header />
-
-        <main className="mx-auto flex-1 max-w-5xl px-4 py-6">
-          {children}
-        </main>
-
-        <Footer />
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen bg-background text-foreground">
+        <ThemeProvider>
+          <Header />
+          <main className="mx-auto flex-1 max-w-5xl px-4 py-6">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
