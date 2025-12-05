@@ -41,7 +41,7 @@ export const Header: React.FC = () => {
           onClick={closeMenu}
         >
           <div className="rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-4 py-1.5 text-sm font-semibold text-white shadow-sm">
-            StackSprint
+            StackFromScratch
           </div>
           <span className="hidden flex-col text-xs text-muted-foreground sm:flex">
             <span className="font-medium text-foreground/80">
