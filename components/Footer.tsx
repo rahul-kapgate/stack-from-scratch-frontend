@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           {/* Brand */}
           <div className="max-w-sm space-y-3">
-            <span className="inline-flex items-center rounded-xl bg-gradient-to-r from-violet-500/80 via-sky-500/80 to-emerald-400/80 px-3 py-1 text-sm font-semibold text-slate-50 shadow-sm">
+            <span className="inline-flex items-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-4 py-1.5 text-sm font-semibold text-white shadow-sm">
               StackSprint
             </span>
             <p className="text-sm text-muted-foreground">

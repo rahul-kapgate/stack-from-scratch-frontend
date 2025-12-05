@@ -10,7 +10,6 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const navItems = [
   { label: "Home", href: "/" },
-  { label: "Tracks", href: "/tracks" },
   { label: "Courses", href: "/courses" },
   { label: "Roadmap", href: "/roadmap" },
   { label: "About", href: "/about" },
@@ -38,7 +37,7 @@ export const Header: React.FC = () => {
           className="flex items-center gap-2"
           onClick={closeMenu}
         >
-          <div className="rounded-xl bg-gradient-to-r from-violet-500/80 via-sky-500/80 to-emerald-400/80 px-3 py-1 text-sm font-semibold text-slate-50 shadow-sm">
+          <div className="rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-4 py-1.5 text-sm font-semibold text-white shadow-sm">
             StackSprint
           </div>
           <span className="hidden flex-col text-xs text-muted-foreground sm:flex">
@@ -83,7 +82,7 @@ export const Header: React.FC = () => {
           </Button>
           <Button
             asChild
-            className="bg-gradient-to-r from-violet-500 via-sky-500 to-emerald-400 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
+            className="bg-gradient-to-r bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
           >
             <Link href="/start">Start Learning</Link>
           </Button>
@@ -151,7 +150,7 @@ export const Header: React.FC = () => {
             </Button>
             <Button
               asChild
-              className="w-full bg-gradient-to-r from-violet-500 via-sky-500 to-emerald-400 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
+              className="w-full bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
             >
               <Link href="/start" onClick={closeMenu}>
                 Start Learning
