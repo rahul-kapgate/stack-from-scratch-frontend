@@ -50,74 +50,93 @@ export const Header: React.FC = () => {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden flex-1 items-center justify-center md:flex">
-          <ul className="flex items-center gap-6 text-sm font-medium">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "relative rounded-full px-3 py-1 transition-all",
-                    "text-muted-foreground hover:text-foreground hover:bg-accent/60",
-                    isActive(item.href) &&
+        {/* Right side (desktop + mobile) */}
+        <div className="flex items-center gap-2">
+          {/* Desktop Nav */}
+          <nav className="hidden flex-1 items-center justify-center md:flex">
+            <ul className="flex items-center gap-6 text-sm font-medium">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "relative rounded-full px-3 py-1 transition-all",
+                      "text-muted-foreground hover:text-foreground hover:bg-accent/60",
+                      isActive(item.href) &&
                       "bg-accent/80 text-foreground shadow-sm"
-                  )}
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Desktop Actions */}
+          <div className="hidden items-center gap-3 md:flex">
+            <ThemeToggle />
+
+            {isAuthenticated ? (
+              <>
+                <span className="hidden text-xs text-muted-foreground sm:inline-block sm:text-sm">
+                  Hi, {user?.firstName ?? "there"}
+                </span>
+                {/* Start Learning – only when logged in */}
+                <Button
+                  asChild
+                  className="bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
                 >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+                  <Link href="/start">Start Learning</Link>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-xs sm:text-sm border-border/70 bg-background/80 hover:border-red-500/70 hover:text-red-500"
+                  onClick={() => {
+                    logout();
+                    closeMenu();
+                  }}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <LoginDialog />
+            )}
+          </div>
 
-        {/* Desktop Actions */}
-        <div className="hidden items-center gap-3 md:flex">
-          <ThemeToggle />
+          {/* Mobile top-row actions */}
+          <div className="flex items-center gap-2 md:hidden">
+            {/* T = Theme toggle */}
+            <ThemeToggle />
 
-          {isAuthenticated ? (
-            <>
-              <span className="hidden text-xs text-muted-foreground sm:inline-block sm:text-sm">
-                Hi, {user?.firstName ?? "there"} 👋
-              </span>
+            {isAuthenticated && (
               <Button
+                asChild
                 size="sm"
-                variant="outline"
-                className="text-xs sm:text-sm border-border/70 bg-background/80 hover:border-red-500/70 hover:text-red-500"
-                onClick={() => {
-                  logout();
-                  closeMenu();
-                }}
+                className="h-8 px-3 bg-gradient-to-r from-indigo-500 to-violet-600 text-xs font-semibold text-slate-50 shadow-md transition hover:brightness-110"
               >
-                Logout
+                <Link href="/start">Start Learning</Link>
               </Button>
-            </>
-          ) : (
-            <LoginDialog />
-          )}
+            )}
 
-          <Button
-            asChild
-            className="bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
-          >
-            <Link href="/start">Start Learning</Link>
-          </Button>
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-full border border-border/70 bg-background/80 p-2 text-foreground shadow-sm transition hover:bg-accent/80"
+              aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isOpen}
+              onClick={toggleMenu}
+            >
+              {isOpen ? (
+                <X className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Menu className="h-5 w-5" aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          type="button"
-          className="inline-flex items-center justify-center rounded-full border border-border/70 bg-background/80 p-2 text-foreground shadow-sm transition hover:bg-accent/80 md:hidden"
-          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={isOpen}
-          onClick={toggleMenu}
-        >
-          {isOpen ? (
-            <X className="h-5 w-5" aria-hidden="true" />
-          ) : (
-            <Menu className="h-5 w-5" aria-hidden="true" />
-          )}
-        </button>
       </div>
 
       {/* Mobile Menu */}
@@ -138,7 +157,7 @@ export const Header: React.FC = () => {
                     "flex w-full items-center justify-between rounded-lg px-3 py-2 transition",
                     "text-muted-foreground hover:bg-accent/70 hover:text-foreground",
                     isActive(item.href) &&
-                      "bg-accent/80 text-foreground shadow-sm"
+                    "bg-accent/80 text-foreground shadow-sm"
                   )}
                 >
                   <span>{item.label}</span>
@@ -151,38 +170,23 @@ export const Header: React.FC = () => {
           </ul>
 
           <div className="mt-4 flex flex-col gap-2">
-            <div className="mb-1 flex items-center justify-between">
-              {isAuthenticated && (
-                <span className="text-xs text-muted-foreground">
-                  Hi, {user?.firstName ?? "there"} 👋
-                </span>
-              )}
-              <ThemeToggle />
-            </div>
 
             {isAuthenticated ? (
-              <Button
-                className="w-full border border-border/70 bg-background/80 text-sm font-medium text-foreground shadow-sm hover:border-red-500/70 hover:text-red-500"
-                variant="outline"
-                onClick={() => {
-                  logout();
-                  closeMenu();
-                }}
-              >
-                Logout
-              </Button>
+              <>
+                <Button
+                  className="w-full border border-border/70 bg-background/80 text-sm font-medium text-foreground shadow-sm hover:border-red-500/70 hover:text-red-500"
+                  variant="outline"
+                  onClick={() => {
+                    logout();
+                    closeMenu();
+                  }}
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               <LoginDialog />
             )}
-
-            <Button
-              asChild
-              className="w-full bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
-            >
-              <Link href="/start" onClick={closeMenu}>
-                Start Learning
-              </Link>
-            </Button>
           </div>
         </nav>
       </div>
