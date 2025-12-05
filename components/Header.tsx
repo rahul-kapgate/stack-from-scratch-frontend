@@ -7,6 +7,8 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { LoginDialog } from "@/components/auth/LoginDialog";
+import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -25,8 +27,9 @@ export const Header: React.FC = () => {
   };
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
-
   const closeMenu = () => setIsOpen(false);
+
+  const { isAuthenticated, user, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-gradient-to-b from-background/80 via-background/90 to-background/95 backdrop-blur">
@@ -56,10 +59,9 @@ export const Header: React.FC = () => {
                   href={item.href}
                   className={cn(
                     "relative rounded-full px-3 py-1 transition-all",
-                    "text-muted-foreground hover:text-foreground",
-                    "hover:bg-accent/60",
+                    "text-muted-foreground hover:text-foreground hover:bg-accent/60",
                     isActive(item.href) &&
-                    "text-foreground bg-accent/80 shadow-sm"
+                      "bg-accent/80 text-foreground shadow-sm"
                   )}
                 >
                   {item.label}
@@ -73,16 +75,30 @@ export const Header: React.FC = () => {
         <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
 
+          {isAuthenticated ? (
+            <>
+              <span className="hidden text-xs text-muted-foreground sm:inline-block sm:text-sm">
+                Hi, {user?.firstName ?? "there"} 👋
+              </span>
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs sm:text-sm border-border/70 bg-background/80 hover:border-red-500/70 hover:text-red-500"
+                onClick={() => {
+                  logout();
+                  closeMenu();
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <LoginDialog />
+          )}
+
           <Button
             asChild
-            variant="outline"
-            className="border-border/70 bg-background/60 text-sm font-medium shadow-sm transition hover:border-violet-500/70 hover:bg-background/80"
-          >
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button
-            asChild
-            className="bg-gradient-to-r bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
+            className="bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
           >
             <Link href="/start">Start Learning</Link>
           </Button>
@@ -122,7 +138,7 @@ export const Header: React.FC = () => {
                     "flex w-full items-center justify-between rounded-lg px-3 py-2 transition",
                     "text-muted-foreground hover:bg-accent/70 hover:text-foreground",
                     isActive(item.href) &&
-                    "bg-accent/80 text-foreground shadow-sm"
+                      "bg-accent/80 text-foreground shadow-sm"
                   )}
                 >
                   <span>{item.label}</span>
@@ -135,19 +151,30 @@ export const Header: React.FC = () => {
           </ul>
 
           <div className="mt-4 flex flex-col gap-2">
-            <div className="mb-1 flex justify-end">
+            <div className="mb-1 flex items-center justify-between">
+              {isAuthenticated && (
+                <span className="text-xs text-muted-foreground">
+                  Hi, {user?.firstName ?? "there"} 👋
+                </span>
+              )}
               <ThemeToggle />
             </div>
 
-            <Button
-              asChild
-              variant="outline"
-              className="w-full border-border/70 bg-background/80 text-sm font-medium transition hover:border-violet-500/70 hover:bg-background/90"
-            >
-              <Link href="/login" onClick={closeMenu}>
-                Login
-              </Link>
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                className="w-full border border-border/70 bg-background/80 text-sm font-medium text-foreground shadow-sm hover:border-red-500/70 hover:text-red-500"
+                variant="outline"
+                onClick={() => {
+                  logout();
+                  closeMenu();
+                }}
+              >
+                Logout
+              </Button>
+            ) : (
+              <LoginDialog />
+            )}
+
             <Button
               asChild
               className="w-full bg-gradient-to-r from-indigo-500 to-violet-600 text-sm font-semibold text-slate-50 shadow-md transition hover:brightness-110"
