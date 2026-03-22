@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
-import LandingPage from "@/pages/LandingPage"
 import AuthPage from "@/pages/AuthPage"
 import Dashboard from "@/pages/Dashboard"
 import InterviewRoom from "@/pages/InterviewRoom"
 import InterviewResults from "@/pages/InterviewResults"
+import LandingPage from "./pages/LandingPage"
+
 
 export default function App() {
   return (
