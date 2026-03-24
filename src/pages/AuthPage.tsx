@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useSendOtp, useVerifyOtp, useLogin } from "../hooks/Useauth"
 import type { UserType } from "@/utils/authApi"
+import { Link } from "react-router-dom"
 
 type Tab       = "login" | "signup"
 type SignupStep = "form"  | "otp"
@@ -148,7 +149,7 @@ export default function AuthPage() {
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
                       <label className="text-sm font-medium">Password</label>
-                      <a href="#" className="text-xs text-blue-600 hover:underline">Forgot password?</a>
+                      <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline">Forgot password?</Link>
                     </div>
                     <input type="password" placeholder="••••••••"
                       value={loginPassword} onChange={e => setLoginPassword(e.target.value)}
