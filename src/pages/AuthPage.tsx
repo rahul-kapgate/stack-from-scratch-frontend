@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useSendOtp, useVerifyOtp, useLogin } from "@/hooks/useAuth"
+import { useSendOtp, useVerifyOtp, useLogin } from "../hooks/Useauth"
 import type { UserType } from "@/utils/authApi"
 
 type Tab       = "login" | "signup"
@@ -59,7 +59,7 @@ export default function AuthPage() {
     setErrors({})
     loginMutation.mutate(
       { identifier, password: loginPassword },
-      { onError: (err) => setErrors({ identifier: err instanceof Error ? err.message : "Login failed" }) }
+      { onError: (err: Error) => setErrors({ identifier: err instanceof Error ? err.message : "Login failed" }) }
     )
   }
 
@@ -73,7 +73,7 @@ export default function AuthPage() {
       { name, email, phone, password, user_type: userType },
       {
         onSuccess: () => setSignupStep("otp"),
-        onError:  (err) => setErrors({ email: err instanceof Error ? err.message : "Failed to send OTP" }),
+        onError:  (err: Error) => setErrors({ email: err.message ?? "Failed to send OTP" }),
       }
     )
   }
@@ -94,7 +94,7 @@ export default function AuthPage() {
           setVerified(true)
           setOtp("")
         },
-        onError: (err) => setErrors({ otp: err instanceof Error ? err.message : "Invalid OTP" }),
+        onError: (err: Error) => setErrors({ otp: err instanceof Error ? err.message : "Invalid OTP" }),
       }
     )
   }
