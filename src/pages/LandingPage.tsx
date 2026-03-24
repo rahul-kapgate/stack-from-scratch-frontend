@@ -222,6 +222,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+
       {/* CTA */}
       <section className="mt-14 bg-muted border border-border rounded-2xl px-10 py-14 text-center">
         <h2 className="text-3xl font-bold tracking-tight mb-3">
@@ -238,7 +239,7 @@ export default function LandingPage() {
             Create free account
           </button>
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/auth")}
             className="border border-border bg-background hover:bg-accent text-sm font-medium px-6 py-2.5 rounded-lg transition-colors"
           >
             Sign in
