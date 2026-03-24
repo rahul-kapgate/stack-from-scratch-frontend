@@ -6,6 +6,7 @@ import Dashboard from "@/pages/Dashboard"
 import InterviewRoom from "@/pages/InterviewRoom"
 import InterviewResults from "@/pages/InterviewResults"
 import LandingPage from "./pages/LandingPage"
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage"
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path='/forgot-password' element={<ForgotPasswordPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/interview" element={<InterviewRoom />} />
             <Route path="/results" element={<InterviewResults />} />
