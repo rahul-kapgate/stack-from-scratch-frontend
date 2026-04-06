@@ -12,7 +12,7 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage"
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
+     <div className="min-h-screen flex flex-col bg-[#060b14] overflow-x-hidden">
         <Header />
         <div className="flex-1">
           <Routes>
