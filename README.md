@@ -1,1 +1,1 @@
-stack-from-scratch-frontend 
+stack-from-scratch-frontend  
