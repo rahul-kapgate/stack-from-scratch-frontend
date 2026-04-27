@@ -11,11 +11,9 @@ export default function AuthPage() {
   const [signupStep, setSignupStep] = useState<SignupStep>("form");
   const [verified, setVerified] = useState(false);
 
-  // Login fields
   const [identifier, setIdentifier] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  // Signup fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -30,7 +28,6 @@ export default function AuthPage() {
   const sendOtpMutation = useSendOtp();
   const verifyOtpMutation = useVerifyOtp();
 
-  // ── Validation ────────────────────────────────────────
   function validateLogin() {
     const e: Record<string, string> = {};
     if (!identifier) e.identifier = "Email or phone is required";
@@ -52,7 +49,6 @@ export default function AuthPage() {
     return e;
   }
 
-  // ── Handlers ─────────────────────────────────────────
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     const errs = validateLogin();
@@ -65,14 +61,11 @@ export default function AuthPage() {
       { identifier, password: loginPassword },
       {
         onError: (err: Error) =>
-          setErrors({
-            identifier: err instanceof Error ? err.message : "Login failed",
-          }),
+          setErrors({ identifier: err.message ?? "Login failed" }),
       },
     );
   }
 
-  // Step 1 — send ALL fields to backend, backend sends OTP
   function handleSendOtp(e: React.FormEvent) {
     e.preventDefault();
     const errs = validateSignupForm();
@@ -91,7 +84,6 @@ export default function AuthPage() {
     );
   }
 
-  // Step 2 — only email + otp needed
   function handleVerifyOtp(e: React.FormEvent) {
     e.preventDefault();
     if (!otp.trim()) {
@@ -107,16 +99,13 @@ export default function AuthPage() {
       { email, otp },
       {
         onSuccess: () => {
-          // Directly switch to login tab and show verified banner
           setTab("login");
           setSignupStep("form");
           setVerified(true);
           setOtp("");
         },
         onError: (err: Error) =>
-          setErrors({
-            otp: err instanceof Error ? err.message : "Invalid OTP",
-          }),
+          setErrors({ otp: err.message ?? "Invalid OTP" }),
       },
     );
   }
@@ -131,27 +120,76 @@ export default function AuthPage() {
     verifyOtpMutation.reset();
   }
 
-  const ic = (err: boolean, dis: boolean) =>
-    `w-full h-10 px-3 rounded-lg border text-sm bg-background outline-none transition-colors focus:border-blue-500 ${err ? "border-red-400" : "border-border"} ${dis ? "opacity-50 cursor-not-allowed" : ""}`;
+  const inputCls = (hasErr: boolean, disabled: boolean) =>
+    `w-full h-10 px-3 rounded-[10px] border text-sm outline-none transition-colors
+     bg-white/[0.03] text-slate-200 placeholder:text-slate-700
+     ${hasErr ? "border-red-500/60" : "border-white/[0.09] focus:border-blue-500/60"}
+     ${disabled ? "opacity-50 cursor-not-allowed" : ""}`;
 
   return (
-    <div className="min-h-[calc(100vh-120px)] flex items-center justify-center px-4 py-12 bg-background">
-      <div className="w-full max-w-md">
+    <div className="bg-[#060b14] min-h-screen text-slate-100 font-['DM_Sans',sans-serif] flex items-center justify-center px-4 py-14 relative overflow-hidden">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+        @keyframes orb  { 0%,100%{opacity:.5} 50%{opacity:1} }
+        @keyframes fadein { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .orb  { animation: orb 5s ease-in-out infinite; }
+        .auth-card { animation: fadein 0.6s ease both; }
+        .auth-inp:focus { border-color: rgba(59,130,246,0.6) !important; }
+        .auth-btn { transition: all 0.2s ease; }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,0.45); }
+        .auth-btn:active { transform: translateY(0); }
+        .auth-tab-active { border-bottom: 2px solid #3b82f6; }
+      `}</style>
+
+      {/* Orbs */}
+      <div
+        className="orb pointer-events-none fixed -top-28 -left-28 w-[420px] h-[420px] rounded-full z-0"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(37,99,235,0.13) 0%, transparent 65%)",
+        }}
+      />
+      <div
+        className="orb pointer-events-none fixed -bottom-20 -right-20 w-[380px] h-[380px] rounded-full z-0"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139,92,246,0.09) 0%, transparent 65%)",
+          animationDelay: "2.5s",
+        }}
+      />
+
+      <div className="auth-card relative z-10 w-full max-w-[440px]">
+        {/* Badge */}
+        <div className="flex justify-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 rounded-full px-4 py-[7px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
+            <span className="text-xs text-blue-300 font-medium">
+              AI-powered interview platform
+            </span>
+          </div>
+        </div>
+
         {/* Verified banner */}
         {verified && (
-          <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
+          <div className="mb-4 flex items-center gap-2 bg-emerald-500/[0.08] border border-emerald-500/20 text-emerald-400 text-sm px-4 py-3 rounded-xl">
             <span>✓</span> Account verified! Sign in to continue.
           </div>
         )}
 
-        <div className="border border-border rounded-2xl bg-card shadow-sm overflow-hidden">
+        {/* Card */}
+        <div className="bg-white/[0.025] border border-white/[0.07] rounded-[20px] overflow-hidden">
           {/* Tabs */}
-          <div className="grid grid-cols-2 border-b border-border">
+          <div className="grid grid-cols-2 border-b border-white/[0.07]">
             {(["login", "signup"] as Tab[]).map((t) => (
               <button
                 key={t}
                 onClick={() => switchTab(t)}
-                className={`py-3.5 text-sm font-medium transition-colors ${tab === t ? "bg-background text-foreground border-b-2 border-blue-600" : "bg-muted text-muted-foreground hover:text-foreground"}`}
+                className={`py-3.5 text-sm font-medium transition-colors font-['DM_Sans',sans-serif]
+                  ${
+                    tab === t
+                      ? "text-slate-100 bg-white/[0.02] auth-tab-active"
+                      : "text-slate-600 hover:text-slate-400 bg-transparent"
+                  }`}
               >
                 {t === "login" ? "Sign in" : "Create account"}
               </button>
@@ -162,40 +200,36 @@ export default function AuthPage() {
             {/* ── Login ── */}
             {tab === "login" && (
               <>
-                <h2 className="text-xl font-bold tracking-tight mb-1">
+                <h2 className="font-['DM_Serif_Display',serif] text-2xl text-slate-50 mb-1 font-normal">
                   Welcome back
                 </h2>
-                <p className="text-sm text-muted-foreground mb-6">
+                <p className="text-sm text-slate-600 mb-6">
                   Sign in with your email or phone
                 </p>
+
                 <form onSubmit={handleLogin} className="space-y-4" noValidate>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5">
-                      Email or phone
-                    </label>
+                  <Field label="Email or phone" error={errors.identifier}>
                     <input
                       type="text"
                       placeholder="you@example.com or 9876543210"
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       disabled={loginMutation.isPending}
-                      className={ic(
+                      className={inputCls(
                         !!errors.identifier,
                         loginMutation.isPending,
                       )}
                     />
-                    {errors.identifier && (
-                      <p className="text-xs text-red-500 mt-1">
-                        {errors.identifier}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
+
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
-                      <label className="text-sm font-medium">Password</label>
+                      <label className="text-sm font-medium text-slate-400">
+                        Password
+                      </label>
                       <Link
                         to="/forgot-password"
-                        className="text-xs text-blue-600 hover:underline"
+                        className="text-xs text-blue-500 hover:underline"
                       >
                         Forgot password?
                       </Link>
@@ -206,73 +240,68 @@ export default function AuthPage() {
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
                       disabled={loginMutation.isPending}
-                      className={ic(
+                      className={inputCls(
                         !!errors.loginPassword,
                         loginMutation.isPending,
                       )}
                     />
                     {errors.loginPassword && (
-                      <p className="text-xs text-red-500 mt-1">
-                        {errors.loginPassword}
-                      </p>
+                      <ErrMsg msg={errors.loginPassword} />
                     )}
                   </div>
-                  <Btn pending={loginMutation.isPending} label="Sign in" />
+
+                  <SubmitBtn
+                    pending={loginMutation.isPending}
+                    label="Sign in"
+                  />
                 </form>
-                <Switch tab="login" onSwitch={() => switchTab("signup")} />
+
+                <SwitchRow tab="login" onSwitch={() => switchTab("signup")} />
               </>
             )}
 
-            {/* ── Signup Step 1: Form ── */}
+            {/* ── Signup Step 1 ── */}
             {tab === "signup" && signupStep === "form" && (
               <>
-                <h2 className="text-xl font-bold tracking-tight mb-1">
+                <h2 className="font-['DM_Serif_Display',serif] text-2xl text-slate-50 mb-1 font-normal">
                   Create your account
                 </h2>
-                <p className="text-sm text-muted-foreground mb-6">
+                <p className="text-sm text-slate-600 mb-6">
                   We'll send an OTP to verify your email
                 </p>
+
                 <form onSubmit={handleSendOtp} className="space-y-4" noValidate>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5">
-                      Full name
-                    </label>
+                  <Field label="Full name" error={errors.name}>
                     <input
                       type="text"
                       placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       disabled={sendOtpMutation.isPending}
-                      className={ic(!!errors.name, sendOtpMutation.isPending)}
+                      className={inputCls(
+                        !!errors.name,
+                        sendOtpMutation.isPending,
+                      )}
                     />
-                    {errors.name && (
-                      <p className="text-xs text-red-500 mt-1">{errors.name}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5">
-                      Email
-                    </label>
+                  </Field>
+
+                  <Field label="Email" error={errors.email}>
                     <input
                       type="email"
                       placeholder="you@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={sendOtpMutation.isPending}
-                      className={ic(!!errors.email, sendOtpMutation.isPending)}
+                      className={inputCls(
+                        !!errors.email,
+                        sendOtpMutation.isPending,
+                      )}
                     />
-                    {errors.email && (
-                      <p className="text-xs text-red-500 mt-1">
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5">
-                      Phone number
-                    </label>
+                  </Field>
+
+                  <Field label="Phone number" error={errors.phone}>
                     <div className="flex gap-2">
-                      <span className="h-10 px-3 flex items-center border border-border rounded-lg text-sm text-muted-foreground bg-muted shrink-0">
+                      <span className="h-10 px-3 flex items-center border border-white/[0.09] rounded-[10px] text-sm text-slate-600 bg-white/[0.05] shrink-0">
                         +91
                       </span>
                       <input
@@ -284,17 +313,13 @@ export default function AuthPage() {
                           setPhone(e.target.value.replace(/\D/, ""))
                         }
                         disabled={sendOtpMutation.isPending}
-                        className={`flex-1 ${ic(!!errors.phone, sendOtpMutation.isPending)}`}
+                        className={`flex-1 ${inputCls(!!errors.phone, sendOtpMutation.isPending)}`}
                       />
                     </div>
-                    {errors.phone && (
-                      <p className="text-xs text-red-500 mt-1">
-                        {errors.phone}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
+
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">
+                    <label className="block text-sm font-medium text-slate-400 mb-1.5">
                       I am a
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -304,58 +329,54 @@ export default function AuthPage() {
                           type="button"
                           onClick={() => setUserType(r)}
                           disabled={sendOtpMutation.isPending}
-                          className={`h-10 rounded-lg border text-sm font-medium transition-colors disabled:opacity-50 ${userType === r ? "border-blue-600 bg-blue-50 text-blue-700" : "border-border bg-background hover:bg-muted"}`}
+                          className={`h-10 rounded-[10px] border text-sm font-medium transition-all disabled:opacity-50
+                            ${
+                              userType === r
+                                ? "border-blue-500/50 bg-blue-500/[0.12] text-blue-300"
+                                : "border-white/[0.09] bg-white/[0.03] text-slate-500 hover:text-slate-300 hover:border-white/20"
+                            }`}
                         >
                           {r === "student" ? "🎓 Student" : "💼 Professional"}
                         </button>
                       ))}
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5">
-                      Password
-                    </label>
+
+                  <Field label="Password" error={errors.password}>
                     <input
                       type="password"
                       placeholder="Min. 6 characters"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={sendOtpMutation.isPending}
-                      className={ic(
+                      className={inputCls(
                         !!errors.password,
                         sendOtpMutation.isPending,
                       )}
                     />
-                    {errors.password && (
-                      <p className="text-xs text-red-500 mt-1">
-                        {errors.password}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5">
-                      Confirm password
-                    </label>
+                  </Field>
+
+                  <Field label="Confirm password" error={errors.confirmPwd}>
                     <input
                       type="password"
                       placeholder="Re-enter password"
                       value={confirmPwd}
                       onChange={(e) => setConfirmPwd(e.target.value)}
                       disabled={sendOtpMutation.isPending}
-                      className={ic(
+                      className={inputCls(
                         !!errors.confirmPwd,
                         sendOtpMutation.isPending,
                       )}
                     />
-                    {errors.confirmPwd && (
-                      <p className="text-xs text-red-500 mt-1">
-                        {errors.confirmPwd}
-                      </p>
-                    )}
-                  </div>
-                  <Btn pending={sendOtpMutation.isPending} label="Send OTP" />
+                  </Field>
+
+                  <SubmitBtn
+                    pending={sendOtpMutation.isPending}
+                    label="Send OTP"
+                  />
                 </form>
-                <Switch tab="signup" onSwitch={() => switchTab("login")} />
+
+                <SwitchRow tab="signup" onSwitch={() => switchTab("login")} />
               </>
             )}
 
@@ -363,26 +384,24 @@ export default function AuthPage() {
             {tab === "signup" && signupStep === "otp" && (
               <>
                 <div className="text-center mb-6">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3 text-xl">
+                  <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-3 text-xl">
                     ✉
                   </div>
-                  <h2 className="text-xl font-bold tracking-tight mb-1">
+                  <h2 className="font-['DM_Serif_Display',serif] text-2xl text-slate-50 mb-1 font-normal">
                     Check your email
                   </h2>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-slate-600">
                     We sent a 6-digit OTP to{" "}
-                    <span className="font-medium text-foreground">{email}</span>
+                    <span className="font-medium text-slate-300">{email}</span>
                   </p>
                 </div>
+
                 <form
                   onSubmit={handleVerifyOtp}
                   className="space-y-4"
                   noValidate
                 >
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5">
-                      Enter OTP
-                    </label>
+                  <Field label="Enter OTP" error={errors.otp}>
                     <input
                       type="text"
                       placeholder="••••••"
@@ -390,19 +409,18 @@ export default function AuthPage() {
                       maxLength={6}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/, ""))}
                       disabled={verifyOtpMutation.isPending}
-                      className={`${ic(!!errors.otp, verifyOtpMutation.isPending)} text-center text-2xl tracking-[0.6em] font-mono`}
+                      className={`${inputCls(!!errors.otp, verifyOtpMutation.isPending)} text-center text-2xl tracking-[0.6em] font-mono`}
                     />
-                    {errors.otp && (
-                      <p className="text-xs text-red-500 mt-1">{errors.otp}</p>
-                    )}
-                  </div>
-                  <Btn
+                  </Field>
+
+                  <SubmitBtn
                     pending={verifyOtpMutation.isPending}
                     label="Verify & create account"
                   />
                 </form>
+
                 <div className="text-center mt-4 space-y-2">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-slate-600">
                     Didn't receive it?{" "}
                     <button
                       type="button"
@@ -419,9 +437,9 @@ export default function AuthPage() {
                       disabled={
                         sendOtpMutation.isPending || sendOtpMutation.isSuccess
                       }
-                      className="text-blue-600 hover:underline font-medium disabled:opacity-50"
+                      className="text-blue-500 hover:underline font-medium disabled:opacity-50"
                     >
-                      {sendOtpMutation.isPending ? "Sending..." : "Resend OTP"}
+                      {sendOtpMutation.isPending ? "Sending…" : "Resend OTP"}
                     </button>
                   </p>
                   <button
@@ -431,7 +449,7 @@ export default function AuthPage() {
                       setOtp("");
                       setErrors({});
                     }}
-                    className="text-xs text-muted-foreground hover:text-foreground underline"
+                    className="text-xs text-slate-600 hover:text-slate-400 underline"
                   >
                     ← Change details
                   </button>
@@ -441,13 +459,13 @@ export default function AuthPage() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-5">
+        <p className="text-center text-xs text-slate-700 mt-5">
           By continuing, you agree to our{" "}
-          <a href="#" className="hover:underline">
+          <a href="#" className="hover:underline text-slate-600">
             Terms
           </a>{" "}
           and{" "}
-          <a href="#" className="hover:underline">
+          <a href="#" className="hover:underline text-slate-600">
             Privacy Policy
           </a>
         </p>
@@ -456,12 +474,38 @@ export default function AuthPage() {
   );
 }
 
-function Btn({ pending, label }: { pending: boolean; label: string }) {
+// ── Helpers ──────────────────────────────────────────────
+
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-slate-400 mb-1.5">
+        {label}
+      </label>
+      {children}
+      {error && <ErrMsg msg={error} />}
+    </div>
+  );
+}
+
+function ErrMsg({ msg }: { msg: string }) {
+  return <p className="text-xs text-red-400 mt-1">{msg}</p>;
+}
+
+function SubmitBtn({ pending, label }: { pending: boolean; label: string }) {
   return (
     <button
       type="submit"
       disabled={pending}
-      className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+      className="auth-btn w-full h-10 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-[10px] flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(37,99,235,0.3)]"
     >
       {pending ? (
         <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -480,21 +524,21 @@ function Btn({ pending, label }: { pending: boolean; label: string }) {
           />
         </svg>
       ) : (
-        label
+        `${label} →`
       )}
     </button>
   );
 }
 
-function Switch({ tab, onSwitch }: { tab: Tab; onSwitch: () => void }) {
+function SwitchRow({ tab, onSwitch }: { tab: Tab; onSwitch: () => void }) {
   return (
-    <p className="text-center text-sm text-muted-foreground mt-5">
+    <p className="text-center text-sm text-slate-600 mt-5">
       {tab === "login"
         ? "Don't have an account? "
         : "Already have an account? "}
       <button
         onClick={onSwitch}
-        className="text-blue-600 hover:underline font-medium"
+        className="text-blue-500 hover:underline font-medium"
       >
         {tab === "login" ? "Create one" : "Sign in"}
       </button>

@@ -22,7 +22,7 @@ export default function Header() {
         {/* Desktop nav */}
         <nav className="hidden md:flex gap-8 items-center text-sm font-medium">
           <Link
-            to="/"
+            to="/about-us"
             className="text-slate-400 hover:text-slate-200 transition-colors"
           >
             About Us
@@ -115,7 +115,7 @@ export default function Header() {
       >
         <div className="flex flex-col gap-4 px-7 py-5">
           <Link
-            to="/"
+            to="/about-us"
             onClick={() => setOpen(false)}
             className="text-slate-400 text-[15px] font-medium no-underline hover:text-slate-200 transition-colors"
           >
