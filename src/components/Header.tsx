@@ -116,7 +116,7 @@ export default function Header() {
               About Us
             </Link>
             <Link
-              to="/contact"
+              to="/contact-us"
               className={`hdr-nav-link text-[13.5px] font-medium transition-colors no-underline ${
                 pathname === "/contact"
                   ? "active text-blue-300"
