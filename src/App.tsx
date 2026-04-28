@@ -6,7 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import AboutUsPage from "@/pages/AboutUsPage";
 import ContactUsPage from "./pages/ContactUsPage";
-
+import Dashboard from "./pages/dashboard";
 
 export default function App() {
   return (
@@ -16,10 +16,14 @@ export default function App() {
         <div className="flex-1">
           <Routes>
             <Route path="/" element={<LandingPage />} />
+
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
             <Route path="/about-us" element={<AboutUsPage />} />
             <Route path="/contact-us" element={<ContactUsPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </div>
         <Footer />
