@@ -292,27 +292,6 @@ const faqs = [
   },
 ];
 
-const TRUST_ITEMS = [
-  { icon: "🔒", text: "No credit card required" },
-  { icon: "⚡", text: "3 free interviews included" },
-  { icon: "✕", text: "Cancel anytime" },
-];
- 
-const ROTATING_ROLES = [
-  "Frontend Engineer",
-  "Backend Engineer",
-  "Full Stack Dev",
-  "System Designer",
-  "Data Engineer",
-];
- 
-const SOCIAL_PROOF = [
-  { initials: "PS", color: "#3b82f6", name: "Priya S.", note: "Got into Flipkart" },
-  { initials: "RK", color: "#10b981", name: "Rohan K.", note: "Cracked Amazon SDE-2" },
-  { initials: "AM", color: "#8b5cf6", name: "Arjun M.", note: "Offer from Razorpay" },
-  { initials: "SK", color: "#f59e0b", name: "Sneha K.", note: "Placed at Swiggy" },
-  { initials: "VR", color: "#ef4444", name: "Vikram R.", note: "Joined Google India" },
-];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
