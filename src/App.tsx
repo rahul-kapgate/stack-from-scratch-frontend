@@ -6,7 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import AboutUsPage from "@/pages/AboutUsPage";
 import ContactUsPage from "./pages/ContactUsPage";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./Layout/dashboard/Dashboard";
 
 export default function App() {
   return (
