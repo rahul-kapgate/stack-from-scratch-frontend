@@ -5,6 +5,7 @@ import AuthPage from "@/pages/AuthPage";
 import LandingPage from "./pages/LandingPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import AboutUsPage from "@/pages/AboutUsPage";
+import ContactUsPage from "./pages/ContactUsPage";
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/about-us" element={<AboutUsPage />} />
+            <Route path="/contact-us" element={<ContactUsPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Routes>
         </div>
